@@ -1,11 +1,11 @@
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 
 #Imports dataset
-dataset = pd.read_csv('Data.csv')
+dataset = pd.read_csv('Data/Data.csv')
 x = (dataset['interest rate (%)']).values
 y = [float((rec.strip('$')).replace(',','')) for rec in dataset['Median home price']]
 # plt.scatter(x,y)
