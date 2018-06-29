@@ -10,15 +10,17 @@ import pandas as pd
 #we are intrested to create a linear model out of training data
 #our depenant variable is the last column of the csv file (Estimated Relative Performance)
 dataset = pd.read_csv('Data/data.csv')
-X = dataset.iloc[:,:-1].values
-y = dataset.iloc[:,9].values
-#since our dataset has multiple categorical independant variables, we need to encode them.
+X = dataset.iloc[:,1:-1].values
+y = dataset.iloc[:,-1].values
+
+#transforming categorical data.
 #if there are no categorical variables, skip this step
-labelencoder_X = LabelEncoder()
-X[:,0] = labelencoder_X.fit_transform(X[:,0])
-X[:,1] = labelencoder_X.fit_transform(X[:,1])
-onehotencoder = OneHotEncoder(categorical_features = [0,1])
-X = onehotencoder.fit_transform(X).toarray()
+
+# labelencoder_X = LabelEncoder()
+# X[:,0] = labelencoder_X.fit_transform(X[:,0])
+# X[:,1] = labelencoder_X.fit_transform(X[:,1])
+# onehotencoder = OneHotEncoder(categorical_features = [0,1])
+# X = onehotencoder.fit_transform(X).toarray()
 
 #To run away from dummy variable trap we delete one of the dummy variables
 X = X[:,1:]
@@ -34,20 +36,14 @@ regressor.fit(X_train,y_train)
 y_prediction = regressor.predict(X_test)
 
 #adding column of ones to the beginning of the dataset. this is because the form is b0+b1X1+...+bnXn. withoud adding ones we eliminate the b0
-X = np.append(arr = np.ones((208,1)).astype(int), values = X, axis = 1)
-
-#Backward elimination to remove less significant variables
-X_opt = X[:,[0,1,2,3,4,5]] #based on number of variables
-regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit() #ordinary least squares
-regressor_OLS.summary()
-
+X = np.append(arr = np.ones((60,1)).astype(int), values = X, axis = 1)
+# #Backward elimination to remove less significant variables
 #check the statistics, look for P value. set a significance level and if P value of a variable was above the significance value, then remove it
-X_opt = X[:,[1,2,3,4,5]] #based on number of variables
+#significance level I chose was P< 0.05
+X_opt = X[:,[0,1,5,7,8,11,12]] #start with number of independant variables and then remove step by step as P value is checked
 regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit() #ordinary least squares
-regressor_OLS.summary()
+print regressor_OLS.summary()
 
-X_opt = X[:,[1,3,4,5]] #based on number of variables
-regressor_OLS = sm.OLS(endog = y, exog = X_opt).fit() #ordinary least squares
-regressor_OLS.summary()
+# the remained X_opt are the independant variables that have significant impact on the dependant variable.
 
-#if all the variables are below the significance level, then the optimal model is made
+
