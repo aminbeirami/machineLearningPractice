@@ -21,7 +21,7 @@ X_train = sc_X.fit_transform(X_train)
 X_test = sc_X.fit_transform(X_test)
 
 #fitting classifier to the dataset
-classifier = SVC(kernel = 'linear', random_state = 0)
+classifier = SVC(kernel = 'rbf', random_state = 0) #rbf takes the data to a higher dimension and separates classes from each other
 classifier.fit(X_train,y_train)
 
 #now we predict the values of y based on X_test
@@ -42,11 +42,11 @@ plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green'))(i), label = j)
-plt.title('SVM with linear kernel (Training set)')
+plt.title('SVM with rbf kernel (Training set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
-plt.savefig('SVM.png')
+plt.savefig('rbf_SVM.png')
 
 #visualization of the test set
 X_set, y_set = X_test, y_test
@@ -59,8 +59,8 @@ plt.ylim(X2.min(), X2.max())
 for i, j in enumerate(np.unique(y_set)):
     plt.scatter(X_set[y_set == j, 0], X_set[y_set == j, 1],
                 c = ListedColormap(('red', 'green'))(i), label = j)
-plt.title('SVM with linear kernel (Test set)')
+plt.title('SVM with rbf kernel (Test set)')
 plt.xlabel('Age')
 plt.ylabel('Estimated Salary')
 plt.legend()
-plt.savefig('SVM_pred.png')
+plt.savefig('rbf_SVM_pred.png')
